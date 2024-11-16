@@ -11,12 +11,12 @@ LABEL="cc_backend" # タグBを設定
 
 # 最大数1_000 しか gh が対応できないので、これ以上欲しい場合はページネーション or gh 以外で考える
 # 注意: reviewed_byがresponseになくてrequest にしか載せられないため、2回別のargsでAPI投げてる関係から、ここの値が少ないと壊れるまたは1kを超えると壊れるので注意。TODO: そうなったら gh pr list でうまくできないか調べる
-LIMIT="1" 
+LIMIT="1000"
 
 ME="snamiki1212"
-SEARCH_FROM="2024-09-01"
-SEARCH_TO="2024-11-01"
-verbose=true
+SEARCH_FROM="2024-11-01"
+SEARCH_TO="2024-12-01"
+verbose=false
 
 ##########q############################################
 ##
