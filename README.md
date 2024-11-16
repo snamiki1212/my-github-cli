@@ -3,7 +3,7 @@
 ## Usage
 
 ```zsh
-zsh src/cmd/pr_review_rate/main.zsh
+zsh src/cmd/pr_review_rate/search.zsh
 ```
 
 ## REF

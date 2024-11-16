@@ -19,7 +19,7 @@ verbose=true
 ## Main
 ##
 ######################################################
-cmd_all_prs="gh search prs --repo $REPO --label $LABEL --created \"$SEARCH_FROM..$SEARCH_TO\" --limit $LIMIT --json id"
+cmd_all_prs="gh search prs --repo $REPO --label $LABEL --created \"$SEARCH_FROM..$SEARCH_TO\" --limit $LIMIT --json number"
 cmd_my_prs="$cmd_all_prs --reviewed-by $ME"
 
 # log
@@ -53,10 +53,7 @@ if [ "$TOTAL" -eq 0 ]; then
   exit 0
 fi
 
-if [ "$verbose" = true ]; then
-  ids=$(echo $MY_PRs | jq '[.[] | .id]')
-  echo "ids: $ids"
-fi
+
 
 # 件数取得
 APPROVED_COUNT=$(echo $MY_PRs | jq '. | length')
@@ -78,4 +75,20 @@ result=$(jq -n \
     approval_rate: $approval_rate,
     total: $total
   }')
+
+if [ "$verbose" = true ]; then
+  # all PR numbers
+  list1=$(echo $ALL_PRs | jq '[.[] | .number]')
+  result=$(jq --arg list1 "$list1" '. + {all_pr_numbers: $list1}' <<< $result)
+
+
+  # approved PR numbers
+  list2=$(echo $MY_PRs | jq '[.[] | .number]')
+  result=$(jq --arg list2 "$list2" '. + {approved_pr_numbers: $list2}' <<< $result)
+
+  # not approved PR numbers
+  list3=$(echo $ALL_PRs | jq --argjson list2 "$list2" '[.[] | select(.number | IN($list2) | not) | .number]')
+  result=$(jq --arg list3 "$list3" '. + {not_approved_pr_numbers: $list3}' <<< $result)
+fi
+
 echo $result
