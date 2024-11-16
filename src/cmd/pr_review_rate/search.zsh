@@ -14,16 +14,19 @@ LABEL="cc_backend" # タグBを設定
 LIMIT="1000"
 
 ME="snamiki1212"
-SEARCH_FROM="2024-11-01"
-SEARCH_TO="2024-12-01"
-verbose=false
+SEARCH_FROM="2024-10-01"
+SEARCH_TO="2024-11-01"
+verbose=true # true だと詳細情報も追加
+
+# TODO
+# タイトルにrevert が含まれる時、除外しても良さそう
 
 ##########q############################################
 ##
 ## Main
 ##
 ######################################################
-cmd_base="gh search prs --repo $REPO --label $LABEL --created \"$SEARCH_FROM..$SEARCH_TO\" --limit $LIMIT --json number --merged"
+cmd_base="gh search prs --repo $REPO --label $LABEL --created \"$SEARCH_FROM..$SEARCH_TO\" --limit $LIMIT --json number,url --merged"
 cmd_all_prs="$cmd_base                   -- -author:app/dependabot -author:$ME"
 cmd_my_prs=" $cmd_base --reviewed-by $ME -- -author:app/dependabot -author:$ME"
 
@@ -81,16 +84,16 @@ result=$(jq -n \
 
 if [ "$verbose" = true ]; then
   # all PR numbers
-  list1=$(echo $ALL_PRs | jq '[.[] | .number]')
-  result=$(jq --arg list1 "$list1" '. + {all_pr_numbers: $list1}' <<< $result)
+  list1=$(echo $ALL_PRs | jq '[.[] | .url]')
+  result=$(jq --arg list1 "$list1" '. + {all_prs: $list1}' <<< $result)
 
   # approved PR numbers
-  list2=$(echo $APPROVED_PRs | jq '[.[] | .number]')
-  result=$(jq --arg list2 "$list2" '. + {approved_pr_numbers: $list2}' <<< $result)
+  list2=$(echo $APPROVED_PRs | jq '[.[] | .url]')
+  result=$(jq --arg list2 "$list2" '. + {approved_prs: $list2}' <<< $result)
 
   # not approved PR numbers
-  list3=$(echo $ALL_PRs | jq --argjson list2 "$list2" '[.[] | select(.number | IN($list2[]) | not) | .number]')
-  result=$(jq --arg list3 "$list3" '. + {not_approved_pr_numbers: $list3}' <<< $result)
+  list3=$(echo $ALL_PRs | jq --argjson list2 "$list2" '[.[] | select(.url | IN($list2[]) | not) | .url]')
+  result=$(jq --arg list3 "$list3" '. + {not_approved_pr: $list3}' <<< $result)
 fi
 
 echo $result
