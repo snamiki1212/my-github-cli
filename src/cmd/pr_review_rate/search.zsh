@@ -19,7 +19,7 @@ verbose=true
 ## Main
 ##
 ######################################################
-cmd="gh pr list --repo $REPO --label $LABEL --search \"created:$SEARCH_FROM..$SEARCH_TO\" --limit $LIMIT --json number,labels,reviews "
+cmd="gh search prs --repo $REPO --label $LABEL --reviewed-by $ME --created \"$SEARCH_FROM..$SEARCH_TO\" --limit $LIMIT --json number,labels,reviews"
 
 # log
 echo "Runnin following cmd...
