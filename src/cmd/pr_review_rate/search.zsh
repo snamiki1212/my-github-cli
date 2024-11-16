@@ -10,8 +10,8 @@ REPO="SSK-TBD/bluage" # プロジェクトのリポジトリ名（例: openai/ch
 LABEL="cc_backend" # タグBを設定
 LIMIT="1000" # 最大数1_000 しか gh が対応できないので、これ以上欲しい場合はページネーション or gh 以外で考える
 ME="snamiki1212"
-SEARCH_FROM="2024-10-01"
-SEARCH_TO="2024-11-01"
+SEARCH_FROM="2024-09-01"
+SEARCH_TO="2024-10-01"
 verbose=true
 
 ##########q############################################
@@ -47,8 +47,8 @@ MY_PRs=$(echo $MY_PRs | tr -d '[:cntrl:]') # 改行コードを削除: https://q
 # echo "||"
 
 # 総PR数を取得
-TOTAL=$(echo "$ALL_PRs" | jq '. | length')
-if [ "$TOTAL" -eq 0 ]; then
+ALL=$(echo "$ALL_PRs" | jq '. | length')
+if [ "$ALL" -eq 0 ]; then
   echo "タグ \"$LABEL\" が付いたPRはありません。"
   exit 0
 fi
@@ -59,7 +59,7 @@ fi
 APPROVED_COUNT=$(echo $MY_PRs | jq '. | length')
 
 # 比率を計算
-APPROVAL_RATE=$(echo "scale=2; ($APPROVED_COUNT / $TOTAL) * 100" | bc)
+APPROVAL_RATE=$(echo "scale=2; ($APPROVED_COUNT / $ALL) * 100" | bc)
 
 # Output
 result=$(jq -n \
@@ -67,13 +67,13 @@ result=$(jq -n \
   --arg to "$SEARCH_TO" \
   --arg approved_count "$APPROVED_COUNT" \
   --arg approval_rate "$APPROVAL_RATE" \
-  --arg total "$TOTAL" \
+  --arg all "$ALL" \
   '{
     from: $from,
     to: $to,
     approved_count: $approved_count,
     approval_rate: $approval_rate,
-    total: $total
+    all: $all
   }')
 
 if [ "$verbose" = true ]; then
