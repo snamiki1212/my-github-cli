@@ -1,7 +1,7 @@
 #!/bin/bash
 ######################################################
 #
-# DEPRECATED: Use search.zsh
+# DEPRECATED: Use search.zsh. うまくgh pr list だと、データを取れてない？かjqでミスってるので
 #
 ######################################################
 
@@ -26,7 +26,7 @@ verbose=true
 ##
 ######################################################
 # gh list cmd
-cmd="gh pr search --repo $REPO --label $LABEL --search \"created:$SEARCH_FROM..$SEARCH_TO\" --limit $LIMIT --json number,labels,reviews "
+cmd="gh pr list --repo $REPO --label $LABEL --search \"created:$SEARCH_FROM..$SEARCH_TO\" --limit $LIMIT --json number,labels,reviews "
 
 # log
 echo "Runnin following cmd...
