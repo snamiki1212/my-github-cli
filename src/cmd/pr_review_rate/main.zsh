@@ -8,10 +8,10 @@
 
 REPO="SSK-TBD/bluage" # プロジェクトのリポジトリ名（例: openai/chatgpt）
 LABEL="cc_backend" # タグBを設定
-LIMIT="30" # 最大数1_000 しか gh が対応できないので、これ以上欲しい場合はページネーション or gh 以外で考える
+LIMIT="1000" # 最大数1_000 しか gh が対応できないので、これ以上欲しい場合はページネーション or gh 以外で考える
 ME="snamiki1212"
-SEARCH_FROM="2024-09-01"
-SEARCH_TO="2024-10-01"
+SEARCH_FROM="2024-11-01"
+SEARCH_TO="2024-12-01"
 
 ######################################################
 ##
@@ -20,10 +20,10 @@ SEARCH_TO="2024-10-01"
 ######################################################
 cmd="gh pr list --repo $REPO --label $LABEL --search \"created:$SEARCH_FROM..$SEARCH_TO\" --limit $LIMIT --json number,labels,reviews "
 
-# # log
-# echo "Runnin following cmd...
-# > $cmd
-# "
+# log
+echo "Runnin following cmd...
+> $cmd
+"
 
 # PR情報を取得
 PR_DATA=$(eval $cmd) # cmd 実行
