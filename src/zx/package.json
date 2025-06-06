@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "run:pr": "zx github_pr.js"
+  },
+  "dependencies": {
+    "gh": "^2.8.9",
+    "zx": "^8.5.5"
+  }
+}
